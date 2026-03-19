@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Zikirmatik - Tespih ve Dijital</title>
+    <title>Modern Zikirmatik - Sonsuz ve Sınırlı</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Digital+Numbers&family=Inter:wght@400;700&display=swap');
@@ -27,7 +27,7 @@
 
         /* Tespih Animasyonu */
         .rosary-container {
-            height: 200px;
+            height: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -44,8 +44,8 @@
         }
 
         .bead {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             background: radial-gradient(circle at 30% 30%, #8b7355, #4a3728);
             border-radius: 50%;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), inset -5px -5px 10px rgba(0,0,0,0.4);
@@ -72,14 +72,9 @@
         }
 
         .main-button {
-            transition: all 0.1s active;
+            transition: transform 0.1s;
         }
 
-        .main-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Parlama Efekti */
         .glow {
             animation: pulse 2s infinite;
         }
@@ -89,29 +84,54 @@
             70% { box-shadow: 0 0 0 20px rgba(34, 197, 94, 0); }
             100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <!-- Üst Başlık ve Mod Seçimi -->
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-amber-500 mb-2">ZİKİRMATİK</h1>
-        <p class="text-gray-400 text-sm italic">"Kalpler ancak Allah'ı anmakla huzur bulur."</p>
+    <!-- Üst Başlık -->
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-amber-500 mb-1">ZİKİRMATİK PRO</h1>
+        <p class="text-gray-400 text-xs italic">Hedefini belirle ve zikrine başla.</p>
+    </div>
+
+    <!-- Ayarlar ve Hedef Paneli -->
+    <div class="mb-4 flex items-center gap-4 bg-gray-800/50 p-3 rounded-2xl border border-gray-700">
+        <div class="flex flex-col">
+            <label class="text-[10px] text-gray-400 uppercase font-bold ml-1">Zikir Hedefi</label>
+            <input type="number" id="targetInput" value="33" 
+                class="bg-transparent text-amber-500 font-bold text-xl w-20 outline-none border-b border-amber-500/30 focus:border-amber-500 px-1"
+                placeholder="0 = ∞">
+        </div>
+        <div class="h-8 w-[1px] bg-gray-700"></div>
+        <div class="flex flex-col items-center">
+            <label class="text-[10px] text-gray-400 uppercase font-bold">Ses</label>
+            <button id="muteBtn" onclick="toggleMute()" class="text-amber-500 hover:text-amber-400 mt-1">
+                <svg id="muteIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                </svg>
+            </button>
+        </div>
     </div>
 
     <!-- Dijital Ekran Paneli -->
-    <div class="bg-gray-900 border-4 border-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden">
-        <div class="flex justify-between items-center mb-6">
-            <span class="text-xs text-green-500 font-bold tracking-widest uppercase">Zikir Sayacı</span>
+    <div class="bg-gray-900 border-4 border-gray-800 p-6 rounded-3xl shadow-2xl w-full max-w-sm relative overflow-hidden">
+        <div class="flex justify-between items-center mb-4">
+            <span id="targetStatus" class="text-[10px] text-green-500 font-bold tracking-widest uppercase">Hedef: 33</span>
             <button onclick="resetCounter()" class="text-gray-500 hover:text-red-500 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
             </button>
         </div>
 
-        <div class="bg-black/50 rounded-xl p-6 text-center mb-8 border border-gray-800">
-            <div id="counter" class="digital-font text-7xl text-green-500 transition-all duration-100">0000</div>
+        <div class="bg-black/50 rounded-xl p-4 text-center mb-6 border border-gray-800">
+            <div id="counter" class="digital-font text-6xl text-green-500 transition-all duration-100">0</div>
         </div>
 
         <!-- Tespih Bölümü -->
@@ -121,39 +141,65 @@
             </div>
             <!-- Merkez Nişanı -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div class="w-16 h-16 border-2 border-amber-500/30 rounded-full"></div>
+                <div class="w-14 h-14 border-2 border-amber-500/20 rounded-full"></div>
             </div>
         </div>
     </div>
 
     <!-- Kontrol Paneli -->
-    <div class="mt-12 flex flex-col items-center gap-6">
+    <div class="mt-8 flex flex-col items-center gap-4">
         <button id="zikirBtn" onclick="incrementCounter()" 
-            class="main-button bg-amber-600 hover:bg-amber-500 text-white font-bold py-6 px-12 rounded-full text-2xl shadow-lg glow">
+            class="main-button bg-amber-600 hover:bg-amber-500 text-white font-bold py-5 px-10 rounded-full text-xl shadow-lg glow uppercase tracking-widest">
             ZİKİR ÇEK
         </button>
         
-        <div class="text-gray-500 text-center text-sm space-y-1">
-            <p>⌨️ <span class="bg-gray-800 px-2 py-1 rounded">Space</span> (Boşluk) tuşuna basarak çekebilirsiniz.</p>
-            <p>🔄 <span class="bg-gray-800 px-2 py-1 rounded">R</span> tuşu ile sıfırlayabilirsiniz.</p>
+        <div class="text-gray-500 text-center text-xs space-y-1">
+            <p>⌨️ <span class="bg-gray-800 px-1.5 py-0.5 rounded text-gray-300">Space</span> tuşu ile çekebilirsiniz.</p>
+            <p>🔄 <span class="bg-gray-800 px-1.5 py-0.5 rounded text-gray-300">R</span> tuşu ile sıfırlayabilirsiniz.</p>
         </div>
     </div>
 
     <!-- Bildirim -->
-    <div id="toast" class="fixed bottom-10 bg-green-600 text-white px-6 py-3 rounded-full opacity-0 transition-opacity pointer-events-none">
+    <div id="toast" class="fixed bottom-10 bg-green-600 text-white px-6 py-3 rounded-full opacity-0 transition-opacity pointer-events-none shadow-xl z-50">
         Hedefe Ulaşıldı!
     </div>
 
     <script>
         let count = 0;
+        let isMuted = false;
         const counterDisplay = document.getElementById('counter');
         const beadsString = document.getElementById('beadsString');
         const zikirBtn = document.getElementById('zikirBtn');
         const toast = document.getElementById('toast');
+        const targetInput = document.getElementById('targetInput');
+        const targetStatus = document.getElementById('targetStatus');
+        const muteIcon = document.getElementById('muteIcon');
 
-        // Boncukları Oluştur
+        // Ses Sentezleyici (Beep sesi için)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playBeep(frequency = 440, duration = 0.2) {
+            if (isMuted) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        // Boncukları Oluştur (Görsel süreklilik için 99 boncuk yeterli)
         const totalBeads = 99;
         function initBeads() {
+            beadsString.innerHTML = '';
             for (let i = 0; i < totalBeads; i++) {
                 const bead = document.createElement('div');
                 bead.className = 'bead';
@@ -163,11 +209,10 @@
         }
 
         function updateBeadsPosition() {
-            // Boncukları kaydır (60px genişlik + 20px gap)
-            const offset = (count % totalBeads) * 80;
+            // Sonsuz döngü hissi için modulo kullanıyoruz
+            const offset = (count % totalBeads) * 70; // 50px bead + 20px gap
             beadsString.style.transform = `translateX(-${offset}px)`;
             
-            // Aktif boncuk efekti
             const beads = document.querySelectorAll('.bead');
             beads.forEach((b, index) => {
                 if (index === (count % totalBeads)) {
@@ -180,44 +225,65 @@
 
         function incrementCounter() {
             count++;
+            const target = parseInt(targetInput.value) || 0;
             
-            // Dijital ekranı güncelle (4 basamaklı)
-            counterDisplay.innerText = count.toString().padStart(4, '0');
+            // Ekranı güncelle
+            counterDisplay.innerText = count;
             
             // Boncukları hareket ettir
             updateBeadsPosition();
 
-            // Titreşim (Mobil destekliyorsa)
+            // Titreşim
             if (navigator.vibrate) {
-                navigator.vibrate(50);
+                navigator.vibrate(40);
             }
 
-            // Önemli sayılarda efekt
-            if (count % 33 === 0) {
-                showToast(count + " Zikir Tamamlandı!");
-                counterDisplay.classList.add('text-amber-400');
-                setTimeout(() => counterDisplay.classList.remove('text-amber-400'), 500);
+            // Normal tık sesi
+            playBeep(300, 0.05);
+
+            // Hedef Kontrolü
+            if (target > 0 && count === target) {
+                playBeep(880, 0.5); // Daha tiz ve uzun ses
+                showToast("Hedef " + target + " Tamamlandı!");
+                counterDisplay.classList.add('text-amber-500');
+                setTimeout(() => counterDisplay.classList.remove('text-amber-500'), 1000);
+            } else if (count % 33 === 0) {
+                playBeep(600, 0.2);
             }
         }
 
         function resetCounter() {
-            if (confirm("Sayacı sıfırlamak istediğinize emin misiniz?")) {
+            const modalCheck = confirm("Sayacı sıfırlamak istediğinize emin misiniz?");
+            if (modalCheck) {
                 count = 0;
-                counterDisplay.innerText = "0000";
+                counterDisplay.innerText = "0";
                 updateBeadsPosition();
             }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            muteIcon.innerHTML = isMuted ? 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />' : 
+                '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />';
         }
 
         function showToast(msg) {
             toast.innerText = msg;
             toast.style.opacity = '1';
-            setTimeout(() => toast.style.opacity = '0', 2000);
+            setTimeout(() => toast.style.opacity = '0', 2500);
         }
+
+        // Hedef girişi değiştiğinde durumu güncelle
+        targetInput.addEventListener('input', () => {
+            const val = parseInt(targetInput.value) || 0;
+            targetStatus.innerText = val > 0 ? `Hedef: ${val}` : "Sonsuz Mod";
+        });
 
         // Klavye Kontrolleri
         window.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
-                e.preventDefault(); // Sayfanın aşağı kaymasını engelle
+                e.preventDefault();
                 zikirBtn.classList.add('scale-95', 'brightness-125');
                 incrementCounter();
             }
