@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Zikirmatik - Tespih ve Dijital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Digital+Numbers&family=Inter:wght@400;700&display=swap');
+
+        :root {
+            --bead-color: #4a3728;
+            --thread-color: #8b7355;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: white;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .digital-font {
+            font-family: 'Digital Numbers', sans-serif;
+            text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Tespih Animasyonu */
+        .rosary-container {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .beads-string {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            padding: 0 50vw;
+        }
+
+        .bead {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle at 30% 30%, #8b7355, #4a3728);
+            border-radius: 50%;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), inset -5px -5px 10px rgba(0,0,0,0.4);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .bead::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            width: 20px;
+            height: 4px;
+            background: var(--thread-color);
+            transform: translateY(-50%);
+            z-index: -1;
+        }
+
+        .bead.active {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+            box-shadow: 0 0 20px var(--thread-color);
+        }
+
+        .main-button {
+            transition: all 0.1s active;
+        }
+
+        .main-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Parlama Efekti */
+        .glow {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- Üst Başlık ve Mod Seçimi -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-amber-500 mb-2">ZİKİRMATİK</h1>
+        <p class="text-gray-400 text-sm italic">"Kalpler ancak Allah'ı anmakla huzur bulur."</p>
+    </div>
+
+    <!-- Dijital Ekran Paneli -->
+    <div class="bg-gray-900 border-4 border-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-md relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-xs text-green-500 font-bold tracking-widest uppercase">Zikir Sayacı</span>
+            <button onclick="resetCounter()" class="text-gray-500 hover:text-red-500 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="bg-black/50 rounded-xl p-6 text-center mb-8 border border-gray-800">
+            <div id="counter" class="digital-font text-7xl text-green-500 transition-all duration-100">0000</div>
+        </div>
+
+        <!-- Tespih Bölümü -->
+        <div class="rosary-container">
+            <div id="beadsString" class="beads-string">
+                <!-- Boncuklar JS ile eklenecek -->
+            </div>
+            <!-- Merkez Nişanı -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-16 h-16 border-2 border-amber-500/30 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kontrol Paneli -->
+    <div class="mt-12 flex flex-col items-center gap-6">
+        <button id="zikirBtn" onclick="incrementCounter()" 
+            class="main-button bg-amber-600 hover:bg-amber-500 text-white font-bold py-6 px-12 rounded-full text-2xl shadow-lg glow">
+            ZİKİR ÇEK
+        </button>
+        
+        <div class="text-gray-500 text-center text-sm space-y-1">
+            <p>⌨️ <span class="bg-gray-800 px-2 py-1 rounded">Space</span> (Boşluk) tuşuna basarak çekebilirsiniz.</p>
+            <p>🔄 <span class="bg-gray-800 px-2 py-1 rounded">R</span> tuşu ile sıfırlayabilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Bildirim -->
+    <div id="toast" class="fixed bottom-10 bg-green-600 text-white px-6 py-3 rounded-full opacity-0 transition-opacity pointer-events-none">
+        Hedefe Ulaşıldı!
+    </div>
+
+    <script>
+        let count = 0;
+        const counterDisplay = document.getElementById('counter');
+        const beadsString = document.getElementById('beadsString');
+        const zikirBtn = document.getElementById('zikirBtn');
+        const toast = document.getElementById('toast');
+
+        // Boncukları Oluştur
+        const totalBeads = 99;
+        function initBeads() {
+            for (let i = 0; i < totalBeads; i++) {
+                const bead = document.createElement('div');
+                bead.className = 'bead';
+                beadsString.appendChild(bead);
+            }
+            updateBeadsPosition();
+        }
+
+        function updateBeadsPosition() {
+            // Boncukları kaydır (60px genişlik + 20px gap)
+            const offset = (count % totalBeads) * 80;
+            beadsString.style.transform = `translateX(-${offset}px)`;
+            
+            // Aktif boncuk efekti
+            const beads = document.querySelectorAll('.bead');
+            beads.forEach((b, index) => {
+                if (index === (count % totalBeads)) {
+                    b.classList.add('active');
+                } else {
+                    b.classList.remove('active');
+                }
+            });
+        }
+
+        function incrementCounter() {
+            count++;
+            
+            // Dijital ekranı güncelle (4 basamaklı)
+            counterDisplay.innerText = count.toString().padStart(4, '0');
+            
+            // Boncukları hareket ettir
+            updateBeadsPosition();
+
+            // Titreşim (Mobil destekliyorsa)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            // Önemli sayılarda efekt
+            if (count % 33 === 0) {
+                showToast(count + " Zikir Tamamlandı!");
+                counterDisplay.classList.add('text-amber-400');
+                setTimeout(() => counterDisplay.classList.remove('text-amber-400'), 500);
+            }
+        }
+
+        function resetCounter() {
+            if (confirm("Sayacı sıfırlamak istediğinize emin misiniz?")) {
+                count = 0;
+                counterDisplay.innerText = "0000";
+                updateBeadsPosition();
+            }
+        }
+
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => toast.style.opacity = '0', 2000);
+        }
+
+        // Klavye Kontrolleri
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault(); // Sayfanın aşağı kaymasını engelle
+                zikirBtn.classList.add('scale-95', 'brightness-125');
+                incrementCounter();
+            }
+            if (e.key.toLowerCase() === 'r') {
+                resetCounter();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'Space') {
+                zikirBtn.classList.remove('scale-95', 'brightness-125');
+            }
+        });
+
+        // Başlat
+        initBeads();
+    </script>
+</body>
+</html>
